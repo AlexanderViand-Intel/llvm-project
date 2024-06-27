@@ -22,8 +22,18 @@ def Polynomial_PolynomialType : Polynomial_Type<"Polynomial", "polynomial"> {
   let description = [{
     A type for polynomials in a polynomial quotient ring.
   }];
-  let parameters = (ins Polynomial_RingAttr:$ring);
+  let parameters = (ins Polynomial_RingAttr:$ring, Polynomial_RepresentationAttr:$representation);
   let assemblyFormat = "`<` struct(params) `>`";
+
+  // TODO: What should be the default encoding?
+   let builders = [
+    AttrBuilder<(ins "RingAttr":$ring), [{
+      return $_get(
+        ring.getContext(),
+        ring,
+        RepresentationAttr::get(ring.getContext(), StringAttr::get(ring.getContext(), "TEST")));
+    }]>
+  ];
 }
 
 def PolynomialLike: TypeOrContainer<Polynomial_PolynomialType, "polynomial-like">;
