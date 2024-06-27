@@ -317,10 +317,11 @@ def Polynomial_NTTOp : Polynomial_Op<"ntt", [Pure]> {
     Polynomial_PolynomialType:$input,
     OptionalAttr<Polynomial_PrimitiveRootAttr>:$root
   );
-  let results = (outs RankedTensorOf<[AnyInteger]>:$output);
+  let results = (outs Polynomial_PolynomialType:$output);
   let assemblyFormat = "$input attr-dict `:` qualified(type($input)) `->` type($output)";
   let hasCanonicalizer = 1;
-  let hasVerifier = 1;
+  // let hasVerifier = 1; // TODO: update and re-enable verifier
+  //TODO: Add TypeInference, to swap state of NTT representation attribute (and update verifier, if necessary)
 }
 
 def Polynomial_INTTOp : Polynomial_Op<"intt", [Pure]> {
@@ -338,13 +339,14 @@ def Polynomial_INTTOp : Polynomial_Op<"intt", [Pure]> {
     The choice of primitive root may be optionally specified.
   }];
   let arguments = (
-    ins RankedTensorOf<[AnyInteger]>:$input,
+    ins Polynomial_PolynomialType:$input,
     OptionalAttr<Polynomial_PrimitiveRootAttr>:$root
   );
   let results = (outs Polynomial_PolynomialType:$output);
   let assemblyFormat = "$input attr-dict `:` qualified(type($input)) `->` type($output)";
   let hasCanonicalizer = 1;
-  let hasVerifier = 1;
+  // let hasVerifier = 1; // TODO: update and re-enable verifier 
+  //TODO: Add TypeInference, to swap state of NTT representation attribute 
 }
 
 #endif // POLYNOMIAL_OPS
