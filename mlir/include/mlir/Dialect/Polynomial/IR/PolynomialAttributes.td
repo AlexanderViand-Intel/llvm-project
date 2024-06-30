@@ -183,6 +183,13 @@ def Polynomial_RingAttr : Polynomial_Attr<"Ring", "ring"> {
   ];
 }
 
+def Polynomial_RepresentationAttr : Polynomial_Attr<"Representation", "representation"> {
+  let summary = "an attribute specifying a polynomial representation";
+  let description = [{ Representation Attr TBD }];
+  let parameters = (ins "StringAttr":$representation);
+  let assemblyFormat = "`<` struct(params) `>`";
+}
+
 def Polynomial_PrimitiveRootAttr: Polynomial_Attr<"PrimitiveRoot", "primitive_root"> {
   let summary = "an attribute containing an integer and its degree as a root of unity";
   let description = [{

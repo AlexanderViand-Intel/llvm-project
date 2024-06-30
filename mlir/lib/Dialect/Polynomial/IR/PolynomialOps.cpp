@@ -132,66 +132,66 @@ bool isPrimitiveNthRootOfUnity(const APInt &root, const APInt &n,
   return a.isOne();
 }
 
-/// Verify that the types involved in an NTT or INTT operation are
-/// compatible.
-static LogicalResult verifyNTTOp(Operation *op, RingAttr ring,
-                                 RankedTensorType tensorType,
-                                 std::optional<PrimitiveRootAttr> root) {
-  Attribute encoding = tensorType.getEncoding();
-  if (!encoding) {
-    return op->emitOpError()
-           << "expects a ring encoding to be provided to the tensor";
-  }
-  auto encodedRing = dyn_cast<RingAttr>(encoding);
-  if (!encodedRing) {
-    return op->emitOpError()
-           << "the provided tensor encoding is not a ring attribute";
-  }
+// /// Verify that the types involved in an NTT or INTT operation are
+// /// compatible.
+// static LogicalResult verifyNTTOp(Operation *op, RingAttr ring,
+//                                  RankedTensorType tensorType,
+//                                  std::optional<PrimitiveRootAttr> root) {
+//   Attribute encoding = tensorType.getEncoding();
+//   if (!encoding) {
+//     return op->emitOpError()
+//            << "expects a ring encoding to be provided to the tensor";
+//   }
+//   auto encodedRing = dyn_cast<RingAttr>(encoding);
+//   if (!encodedRing) {
+//     return op->emitOpError()
+//            << "the provided tensor encoding is not a ring attribute";
+//   }
 
-  if (encodedRing != ring) {
-    return op->emitOpError()
-           << "encoded ring type " << encodedRing
-           << " is not equivalent to the polynomial ring " << ring;
-  }
+//   if (encodedRing != ring) {
+//     return op->emitOpError()
+//            << "encoded ring type " << encodedRing
+//            << " is not equivalent to the polynomial ring " << ring;
+//   }
 
-  unsigned polyDegree = ring.getPolynomialModulus().getPolynomial().getDegree();
-  ArrayRef<int64_t> tensorShape = tensorType.getShape();
-  bool compatible = tensorShape.size() == 1 && tensorShape[0] == polyDegree;
-  if (!compatible) {
-    InFlightDiagnostic diag = op->emitOpError()
-                              << "tensor type " << tensorType
-                              << " does not match output type " << ring;
-    diag.attachNote() << "the tensor must have shape [d] where d "
-                         "is exactly the degree of the polynomialModulus of "
-                         "the polynomial type's ring attribute";
-    return diag;
-  }
+//   unsigned polyDegree =
+//   ring.getPolynomialModulus().getPolynomial().getDegree(); ArrayRef<int64_t>
+//   tensorShape = tensorType.getShape(); bool compatible = tensorShape.size()
+//   == 1 && tensorShape[0] == polyDegree; if (!compatible) {
+//     InFlightDiagnostic diag = op->emitOpError()
+//                               << "tensor type " << tensorType
+//                               << " does not match output type " << ring;
+//     diag.attachNote() << "the tensor must have shape [d] where d "
+//                          "is exactly the degree of the polynomialModulus of "
+//                          "the polynomial type's ring attribute";
+//     return diag;
+//   }
 
-  if (root.has_value()) {
-    APInt rootValue = root.value().getValue().getValue();
-    APInt rootDegree = root.value().getDegree().getValue();
-    APInt cmod = ring.getCoefficientModulus().getValue();
-    if (!isPrimitiveNthRootOfUnity(rootValue, rootDegree, cmod)) {
-      return op->emitOpError()
-             << "provided root " << rootValue.getZExtValue()
-             << " is not a primitive root "
-             << "of unity mod " << cmod.getZExtValue()
-             << ", with the specified degree " << rootDegree.getZExtValue();
-    }
-  }
+//   if (root.has_value()) {
+//     APInt rootValue = root.value().getValue().getValue();
+//     APInt rootDegree = root.value().getDegree().getValue();
+//     APInt cmod = ring.getCoefficientModulus().getValue();
+//     if (!isPrimitiveNthRootOfUnity(rootValue, rootDegree, cmod)) {
+//       return op->emitOpError()
+//              << "provided root " << rootValue.getZExtValue()
+//              << " is not a primitive root "
+//              << "of unity mod " << cmod.getZExtValue()
+//              << ", with the specified degree " << rootDegree.getZExtValue();
+//     }
+//   }
 
-  return success();
-}
+//   return success();
+// }
 
-LogicalResult NTTOp::verify() {
-  return verifyNTTOp(this->getOperation(), getInput().getType().getRing(),
-                     getOutput().getType(), getRoot());
-}
+// LogicalResult NTTOp::verify() {
+//   return verifyNTTOp(this->getOperation(), getInput().getType().getRing(),
+//                      getOutput().getType(), getRoot());
+// }
 
-LogicalResult INTTOp::verify() {
-  return verifyNTTOp(this->getOperation(), getOutput().getType().getRing(),
-                     getInput().getType(), getRoot());
-}
+// LogicalResult INTTOp::verify() {
+//   return verifyNTTOp(this->getOperation(), getOutput().getType().getRing(),
+//                      getInput().getType(), getRoot());
+// }
 
 ParseResult ConstantOp::parse(OpAsmParser &parser, OperationState &result) {
   // Using the built-in parser.parseAttribute requires the full
