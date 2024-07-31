@@ -183,6 +183,8 @@ def Polynomial_RingAttr : Polynomial_Attr<"Ring", "ring"> {
   ];
 }
 
+def Polynomial_RingArrayAttr : TypedArrayAttrBase<Polynomial_RingAttr, "polynomial.ring array attribute">;
+
 def Polynomial_PrimitiveRootAttr: Polynomial_Attr<"PrimitiveRoot", "primitive_root"> {
   let summary = "an attribute containing an integer and its degree as a root of unity";
   let description = [{
