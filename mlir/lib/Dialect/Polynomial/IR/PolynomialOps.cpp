@@ -282,11 +282,6 @@ namespace {
 #include "PolynomialCanonicalization.inc"
 } // namespace
 
-void SubOp::getCanonicalizationPatterns(RewritePatternSet &results,
-                                        MLIRContext *context) {
-  results.add<SubAsAdd>(context);
-}
-
 void NTTOp::getCanonicalizationPatterns(RewritePatternSet &results,
                                         MLIRContext *context) {
   results.add<NTTAfterINTT, NTTOfAdd, NTTOfSub>(context);

@@ -26,12 +26,6 @@ def getMinusOne
       "$_builder.getIntegerAttr("
         "cast<PolynomialType>($0.getType()).getRing().getCoefficientType(), -1)">;
 
-def SubAsAdd : Pat<
-  (Polynomial_SubOp $f, $g),
-  (Polynomial_AddOp $f,
-    (Polynomial_MulScalarOp $g,
-      (Arith_ConstantOp (getMinusOne $g))))>;
-
 def INTTAfterNTT : Pat<
   (Polynomial_INTTOp (Polynomial_NTTOp $poly, $r1), $r2),
   (replaceWithValue $poly),

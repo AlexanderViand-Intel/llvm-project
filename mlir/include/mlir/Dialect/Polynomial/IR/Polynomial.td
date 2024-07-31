@@ -81,7 +81,6 @@ def Polynomial_SubOp : Polynomial_BinaryOp<"sub"> {
     %2 = polynomial.sub %0, %1 : !polynomial.polynomial<#ring>
     ```
   }];
-  let hasCanonicalizer = 1;
 }
 
 def Polynomial_MulOp : Polynomial_BinaryOp<"mul", [Commutative]> {
