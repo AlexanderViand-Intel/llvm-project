@@ -853,11 +853,18 @@ class NestedTupleOf<list<Type> allowedTypes> :
 //===----------------------------------------------------------------------===//
 // Common type constraints
 //===----------------------------------------------------------------------===//
-// Type constraint for types that are "like" some type or set of types T, that is
-// they're either a T, a vector of Ts, or a tensor of Ts.
+// Type constraint for types that are "like" some type T, that is
+// they're either a T, a vector of Ts, or a tensor of Ts
 class TypeOrContainer<Type allowedType, string name> : TypeConstraint<Or<[
   allowedType.predicate,
   ValueSemanticsContainerOf<[allowedType]>.predicate]>,
+  name>;
+
+// Type constraint for types that are "like" some set of types T, that is
+// they're either a T, a vector of Ts, or a tensor of Ts
+class TypesOrContainer<list<Type> allowedTypes, string name> : TypeConstraint<Or<[
+  AnyTypeOf<allowedTypes>.predicate, VectorOf<allowedTypes>.predicate,
+  TensorOf<allowedTypes>.predicate]>,
   name>;
 
 // Type constraint for types that are "like" some type or set of types T, that is
