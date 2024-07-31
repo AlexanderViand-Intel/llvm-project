@@ -26,7 +26,17 @@ def Polynomial_PolynomialType : Polynomial_Type<"Polynomial", "polynomial"> {
   let assemblyFormat = "`<` struct(params) `>`";
 }
 
-def PolynomialLike: TypeOrContainer<Polynomial_PolynomialType, "polynomial-like">;
+def Polynomial_RNSType : Polynomial_Type<"RNS", "rns"> {
+  let summary = "A residue number system representation of a polynomial";
+  let description = [{
+  }];
+
+  let parameters = (ins ArrayRefParameter<"mlir::Type">:$basisTypes);
+  let assemblyFormat = "`<` $basisTypes `>`";
+  //TODO: Add verifiers
+}
+
+def PolynomialLike: TypesOrContainer<[Polynomial_PolynomialType,Polynomial_RNSType], "polynomial-like">;
 
 
 #endif // POLYNOMIAL_TYPES
