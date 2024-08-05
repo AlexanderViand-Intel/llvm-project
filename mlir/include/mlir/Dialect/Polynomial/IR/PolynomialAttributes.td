@@ -183,6 +183,19 @@ def Polynomial_RingAttr : Polynomial_Attr<"Ring", "ring"> {
   ];
 }
 
+def Polynomial_RNSRing : Polynomial_Attr<"RNSRing", "rns_ring"> {
+  let description = [{
+    An attribute describing a residue number system representation of a polynomial.
+  }];
+
+  let parameters = (ins
+    ArrayRefParameter<"::mlir::polynomial::RingAttr", "basis types.">:$basisTypes
+  );
+  //TODO: Add verifiers
+
+  let assemblyFormat = "`<` $basisTypes `>`";
+}
+
 def Polynomial_RingArrayAttr : TypedArrayAttrBase<Polynomial_RingAttr, "polynomial.ring array attribute">;
 
 def Polynomial_PrimitiveRootAttr: Polynomial_Attr<"PrimitiveRoot", "primitive_root"> {
